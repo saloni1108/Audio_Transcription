@@ -1,29 +1,11 @@
-include = ["*.py", "pyproject.toml"]
-exclude = [
-    ".git",
-    ".mypy_cache",
-    ".pytest_cache",
-    "__pycache__",
-    "migrations",
-    "venv",
-    ".venv"
-]
+[lint]
+select = ["E", "F", "I", "B", "Q"]
+ignore = ["E501"]
 
-line-length = 88
-target-version = "py311"
-
-select = [
-    "E",   # pycodestyle errors
-    "F",   # pyflakes
-    "I",   # isort
-    "B",   # bugbear
-    "Q",   # flake8-quotes
-]
-
-ignore = [
-    "E501",  # line too long (let formatter handle it)
-]
-
-[isort]
+[lint.isort]
+known-first-party = ["darwix_ai", "transcriptions", "suggestions", "common"]
 combine-as-imports = true
-known-first-party = ["common", "transcribe", "blog", "darwix_ai"]
+force-sort-within-sections = true
+
+[format]
+quote-style = "double"

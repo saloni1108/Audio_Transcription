@@ -1,5 +1,7 @@
 from rest_framework import serializers
-from .models import TranscriptionTask, Word, Speaker
+
+from .models import Speaker, TranscriptionTask, Word
+
 
 class WordSerializer(serializers.ModelSerializer):
     class Meta:

@@ -1,12 +1,13 @@
 from typing import List, Tuple
-import numpy as np
+
 import librosa
-import soundfile as sf
-import webrtcvad
-from sklearn.cluster import AgglomerativeClustering
+import numpy as np
 
 # Lightweight diarization backend using VAD + ECAPA-TDNN embeddings (onnx)
 import onnxruntime as ort
+from sklearn.cluster import AgglomerativeClustering
+import webrtcvad
+
 
 class EcapaOnnx:
     _sess = None
@@ -15,7 +16,8 @@ class EcapaOnnx:
     def _load(cls):
         if cls._sess is None:
             # small public ECAPA ONNX; downloaded at runtime
-            import os, pathlib, urllib.request
+            import pathlib
+            import urllib.request
             path = pathlib.Path("/models/ecapa.onnx")
             path.parent.mkdir(parents=True, exist_ok=True)
             if not path.exists():
@@ -76,7 +78,7 @@ def diarize_vad_ecapa(wav: np.ndarray, sr: int) -> List[Tuple[float,float,int]]:
     embs = np.stack(embs)
     # 2-speaker assumption fallback; can infer via silhouette
     n_speakers = 2 if embs.shape[0] > 1 else 1
-    clustering = AgglomerativeClustering(n_clusters=n_speakers, affinity='cosine', linkage='average')
+    clustering = AgglomerativeClustering(n_clusters=n_speakers, affinity="cosine", linkage="average")
     labels = clustering.fit_predict(embs)
 
     diar = []

@@ -1,7 +1,9 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from django.http import JsonResponse
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from .suggest import suggest
+
 
 class SuggestView(APIView):
     def post(self, request):

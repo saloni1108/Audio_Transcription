@@ -1,7 +1,8 @@
 import os
+
+import boto3
 import psycopg2
 import redis
-import boto3
 
 
 def check_health():

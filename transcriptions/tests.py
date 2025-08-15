@@ -1,5 +1,7 @@
 from django.test import TestCase
-from .models import TranscriptionTask, Word, Speaker
+
+from .models import Speaker, TranscriptionTask, Word
+
 
 class TranscribeModelTests(TestCase):
     def test_create_task(self):

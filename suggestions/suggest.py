@@ -1,8 +1,9 @@
-from sentence_transformers import SentenceTransformer, util
-import sqlite3
-from typing import List, Tuple
-import re
 import os
+import re
+import sqlite3
+from typing import List
+
+from sentence_transformers import SentenceTransformer, util
 
 _model = None
 
@@ -57,6 +58,7 @@ def nearest_titles(body: str, k: int = 10) -> List[str]:
 def call_llm_huggingface(prompt: str) -> dict:
     import json
     import os
+
     import requests
 
     key = os.getenv("HUGGINGFACE_API_KEY", "")

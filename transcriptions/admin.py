@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import TranscriptionTask, Word, Speaker
+
+from .models import Speaker, TranscriptionTask, Word
+
 
 @admin.register(TranscriptionTask)
 class TranscriptionTaskAdmin(admin.ModelAdmin):

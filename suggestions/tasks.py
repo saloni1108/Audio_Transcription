@@ -1,6 +1,7 @@
 from celery import shared_task
-from .suggest import suggest
+
 from .models import BlogSuggestionLog
+from .suggest import suggest
 
 
 @shared_task

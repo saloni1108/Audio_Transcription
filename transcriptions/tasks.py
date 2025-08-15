@@ -1,12 +1,12 @@
 from celery import shared_task
-from django.conf import settings
-from .models import TranscriptionTask, Word, Speaker
-from .storage import put_object_and_presign
-from .audio_utils import diarize_vad_ecapa
 from faster_whisper import WhisperModel
-import numpy as np
 import librosa
+import numpy as np
 import requests
+
+from .audio_utils import diarize_vad_ecapa
+from .models import Speaker, TranscriptionTask, Word
+from .storage import put_object_and_presign
 
 _model = None
 
@@ -27,9 +27,11 @@ def transcribe_task(task_id: str, audio_url: str, content_type: str):
         task.audio_s3_key = key
         wav, sr = librosa.load(librosa.util.buf_to_float(audio_bytes), sr=None, mono=True)  # type: ignore
         # librosa can't load raw bytes directly; save temp
-        import io, soundfile as sf
+        import io
+
+        import soundfile as sf
         data_io = io.BytesIO(audio_bytes)
-        wav, sr = sf.read(data_io, dtype='float32', always_2d=False)
+        wav, sr = sf.read(data_io, dtype="float32", always_2d=False)
 
         duration_sec = len(wav) / sr
         task.duration_sec = duration_sec
@@ -43,7 +45,7 @@ def transcribe_task(task_id: str, audio_url: str, content_type: str):
         # language auto Detect + word timestamps
         segments, info = model.transcribe(audio=audio_bytes, word_timestamps=True)
         task.language = info.language or "en"
-        task.confidence = getattr(info, 'probability', 0.9)
+        task.confidence = getattr(info, "probability", 0.9)
 
         # Map words to speakers by midpoint
         words = []

@@ -1,14 +1,12 @@
 from django.contrib import admin
-from django.urls import path
-from rest_framework_simplejwt.views import TokenObtainPairView
-from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
-from transcriptions.views import TranscribeView, TranscribeStreamView
-from suggestions.views import SuggestView
-from scripts.health_check import check_health
 from django.http import JsonResponse
-from django.conf import settings
-import boto3
-import redis
+from django.urls import path
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+from rest_framework_simplejwt.views import TokenObtainPairView
+
+from scripts.health_check import check_health
+from suggestions.views import SuggestView
+from transcriptions.views import TranscribeStreamView, TranscribeView
 
 
 def healthz(request):

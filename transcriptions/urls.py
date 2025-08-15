@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import TranscribeView, TranscribeStreamView
+
+from .views import TranscribeStreamView, TranscribeView
 
 urlpatterns = [
     path("transcribe", TranscribeView.as_view(), name="transcribe"),

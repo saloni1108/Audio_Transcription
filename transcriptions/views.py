@@ -1,16 +1,16 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from django.http import StreamingHttpResponse
-from django.utils.encoding import smart_str
-from django.db.models import F
+import mimetypes
+
 from django.core.files.uploadedfile import InMemoryUploadedFile, TemporaryUploadedFile
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from common.sse import sse_stream
+
 from .models import TranscriptionTask
 from .serializers import TaskSerializer
-from common.sse import sse_stream
-from django.conf import settings
-from .tasks import transcribe_task
 from .storage import put_object_and_presign
-import mimetypes
+from .tasks import transcribe_task
+
 
 class TranscribeView(APIView):
     def post(self, request):
@@ -35,8 +35,8 @@ class TranscribeView(APIView):
 class TranscribeStreamView(APIView):
     def get(self, request, task_id):
         def event_stream():
-            import time, json
-            last_count = 0
+            import json
+            import time
             while True:
                 task = TranscriptionTask.objects.get(id=task_id)
                 d = TaskSerializer(task).data

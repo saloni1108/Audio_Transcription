@@ -1,9 +1,9 @@
 import time
-from typing import Callable
+
+from django.conf import settings
 from django.http import JsonResponse
 from django.utils.deprecation import MiddlewareMixin
 import redis
-from django.conf import settings
 
 _pool = None
 
