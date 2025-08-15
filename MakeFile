@@ -1,0 +1,31 @@
+.PHONY: dev-up dev-down ingest-sample e2e fmt lint typecheck test
+
+export COMPOSE_DOCKER_CLI_BUILD=1
+export DOCKER_BUILDKIT=1
+
+DEV?=1
+
+dev-up:
+	docker compose up -d --build
+
+dev-down:
+	docker compose down -v
+
+fmt:
+	ruff check . --fix
+
+lint:
+	ruff check .
+	test -z "$$(mypy . --ignore-missing-imports)" || true
+
+typecheck:
+	mypy . --ignore-missing-imports || true
+
+test:
+	pytest -q --cov=.
+
+e2e:
+	bash scripts/e2e.sh
+
+ingest-sample:
+	bash scripts/ingest_sample.sh
