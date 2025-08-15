@@ -11,7 +11,6 @@ from django.conf import settings
 from .tasks import transcribe_task
 from .storage import put_object_and_presign
 import mimetypes
-import uuid
 
 class TranscribeView(APIView):
     permission_classes = [IsAuthenticated]
@@ -40,7 +39,6 @@ class TranscribeStreamView(APIView):
     def get(self, request, task_id):
         def event_stream():
             import time, json
-            import itertools
             last_count = 0
             while True:
                 task = TranscriptionTask.objects.get(id=task_id)
