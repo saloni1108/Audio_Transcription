@@ -54,7 +54,7 @@ jobs:
           mypy . --ignore-missing-imports || true
 
       - name: Run Tests
-        run: pytest -q --cov=.
+        run: pytest -q --cov=. ./tests ./transcriptions ./suggestions
 
       - name: Build Docker image
         uses: docker/build-push-action@v6
