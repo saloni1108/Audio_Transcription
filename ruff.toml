@@ -1,0 +1,29 @@
+include = ["*.py", "pyproject.toml"]
+exclude = [
+    ".git",
+    ".mypy_cache",
+    ".pytest_cache",
+    "__pycache__",
+    "migrations",
+    "venv",
+    ".venv"
+]
+
+line-length = 88
+target-version = "py311"
+
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # bugbear
+    "Q",   # flake8-quotes
+]
+
+ignore = [
+    "E501",  # line too long (let formatter handle it)
+]
+
+[isort]
+combine-as-imports = true
+known-first-party = ["common", "transcribe", "blog", "darwix_ai"]
