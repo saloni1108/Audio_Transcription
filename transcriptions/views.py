@@ -1,20 +1,18 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
 from django.http import StreamingHttpResponse
 from django.utils.encoding import smart_str
 from django.db.models import F
 from django.core.files.uploadedfile import InMemoryUploadedFile, TemporaryUploadedFile
 from .models import TranscriptionTask
 from .serializers import TaskSerializer
+from common.sse import sse_stream
 from django.conf import settings
 from .tasks import transcribe_task
 from .storage import put_object_and_presign
 import mimetypes
 
 class TranscribeView(APIView):
-    permission_classes = [IsAuthenticated]
-
     def post(self, request):
         url = request.query_params.get("url")
         audio_url = None
@@ -35,7 +33,6 @@ class TranscribeView(APIView):
         return Response({"task_id": str(task.id)})
 
 class TranscribeStreamView(APIView):
-    permission_classes = [IsAuthenticated]
     def get(self, request, task_id):
         def event_stream():
             import time, json
@@ -51,6 +48,5 @@ class TranscribeStreamView(APIView):
                     yield f"event: error\ndata: {json.dumps({'error': task.error})}\n\n"
                     break
                 time.sleep(1)
-        resp = StreamingHttpResponse(event_stream(), content_type='text/event-stream')
-        resp['Cache-Control'] = 'no-cache'
+        resp = sse_stream(event_stream())
         return resp
